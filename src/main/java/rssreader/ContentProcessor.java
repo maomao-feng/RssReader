@@ -8,6 +8,7 @@ import java.util.List;
 
 import interfaces.ArticleConverter;
 import interfaces.ArticleFetcher;
+import interfaces.ArticlePrinter;
 import model.Article;
 
 class ContentProcessor {
@@ -16,29 +17,34 @@ class ContentProcessor {
 	private ArticleFetcher fileFetcher;
 	private ArticleConverter wordConverter;
 	private ArticleConverter articleCutter;
+	private ArticlePrinter screenPrinter;
+	private ArticlePrinter filePrinter;
 
 	public ContentProcessor(ArticleFetcher rssFetcher, ArticleFetcher fileFetcher,//
-			ArticleConverter wordConverter, ArticleConverter articleCutter) {
+			ArticleConverter wordConverter, ArticleConverter articleCutter,//
+			ArticlePrinter screenPrinter, ArticlePrinter filePrinter) {
 		this.rssFetcher = rssFetcher;
 		this.fileFetcher = fileFetcher;
 		this.wordConverter = wordConverter;
 		this.articleCutter = articleCutter;
+		this.screenPrinter = screenPrinter;
+		this.filePrinter = filePrinter;
 	}
 
 	void process(ReaderConfig config) throws Exception {
 		List<Article> rawArticles = fetchArticles(config.sourcePath());
+
 		if(null == rawArticles || rawArticles.isEmpty()) {
 			return;
 		}
 		List<Article> convertedArticles = convertArticles(rawArticles, config.conversionTypes());
+
 		if(null == convertedArticles || convertedArticles.isEmpty()) {
 			return;
 		}
-		convertedArticles.stream().forEach(e -> {
-			System.out.println("title: " + e.title());
-			System.out.println("body: " + e.body());
-		});
+		print(convertedArticles, config);
 	}
+
 
 	private List<Article> fetchArticles(String sourcePath) throws Exception {
 		try {
@@ -59,5 +65,13 @@ class ContentProcessor {
 						: articleCutter.convert(articles);
 		}
 		return articles;
+	}
+
+	private void print(List<Article> convertedArticles, ReaderConfig config) {
+		if(config.shouldOutputToScreen()) {
+			screenPrinter.print(convertedArticles, null);
+			return;
+		}
+		filePrinter.print(convertedArticles, config.outputFileName());
 	}
 }

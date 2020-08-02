@@ -4,6 +4,8 @@ import articleconverter.ArticleCutter;
 import articleconverter.WordConverter;
 import articlefetcher.FileFetcher;
 import articlefetcher.RssFetcher;
+import articleprinter.FilePrinter;
+import articleprinter.ScreenPrinter;
 import picocli.CommandLine;
 
 public class RssReader{
@@ -16,8 +18,9 @@ public class RssReader{
         	System.exit(exitCode);
 
         ReaderConfig config = commandLine.getExecutionResult();
-        new ContentProcessor(new RssFetcher(), new FileFetcher(),
-        		new WordConverter(), new ArticleCutter()).process(config);
+        new ContentProcessor(new RssFetcher(), new FileFetcher(),//
+        		new WordConverter(), new ArticleCutter(),//
+        		new ScreenPrinter(), new FilePrinter()).process(config);
     }
 
 }

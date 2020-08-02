@@ -16,6 +16,8 @@ import articleconverter.ArticleCutterMock;
 import articleconverter.WordConverterMock;
 import articlefetcher.FileFetcherMock;
 import articlefetcher.RssFetcherMock;
+import articleprinter.FilePrinterMock;
+import articleprinter.ScreenPrinterMock;
 import model.Article;
 
 @RunWith(Enclosed.class)
@@ -28,6 +30,8 @@ public class ContentProcessorTest {
 	private static FileFetcherMock fileFetcher;
 	private static WordConverterMock wordConverter;
 	private static ArticleCutterMock articleCutter;
+	private static ScreenPrinterMock screenPrinter;
+	private static FilePrinterMock filePrinter;
 
 	public static class FetchArticlesTest{
 		@Before
@@ -36,7 +40,9 @@ public class ContentProcessorTest {
 			fileFetcher = new FileFetcherMock();
 			wordConverter = new WordConverterMock();
 			articleCutter = new ArticleCutterMock();
-			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter);
+			screenPrinter = new ScreenPrinterMock();
+			filePrinter = new FilePrinterMock();
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
 		}
 
 		@Test
@@ -62,6 +68,8 @@ public class ContentProcessorTest {
 			fileFetcher = new FileFetcherMock();
 			wordConverter = new WordConverterMock();
 			articleCutter = new ArticleCutterMock();
+			screenPrinter = new ScreenPrinterMock();
+			filePrinter = new FilePrinterMock();
 		}
 
 
@@ -70,7 +78,7 @@ public class ContentProcessorTest {
 			//setup: rss fetcher return an empty list
 			List<Article> emptyRawArticles = new ArrayList<>();
 			rssFetcher = new RssFetcherMock(emptyRawArticles);
-			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
 			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.cut), null);
 
 			//execute
@@ -86,7 +94,7 @@ public class ContentProcessorTest {
 			//setup: rss fetcher return a non-empty list
 			List<Article> rawArticles = createArticles();
 			rssFetcher = new RssFetcherMock(rawArticles);
-			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
 			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.convert), null);
 
 			//execute
@@ -102,7 +110,7 @@ public class ContentProcessorTest {
 			//setup: rss fetcher return a non-empty list
 			List<Article> rawArticles = createArticles();
 			rssFetcher = new RssFetcherMock(rawArticles);
-			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
 			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.cut), null);
 
 			//execute
@@ -118,7 +126,7 @@ public class ContentProcessorTest {
 			//setup: rss fetcher return a non-empty list
 			List<Article> rawArticles = createArticles();
 			rssFetcher = new RssFetcherMock(rawArticles);
-			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
 			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.convert, ConversionType.cut), null);
 
 			//execute
@@ -127,6 +135,71 @@ public class ContentProcessorTest {
 			//verify
 			assertThat(wordConverter.calledTimes(),is(1));
 			assertThat(articleCutter.calledTimes(),is(1));
+		}
+
+		private List<Article> createArticles() {
+			return Arrays.asList(new Article("test title", "test body"));
+		}
+	}
+
+	public static class PrintArticlesTest{
+
+		@Before
+		public void setUp() {
+			List<Article> rawArticles = createArticles();
+			rssFetcher = new RssFetcherMock(rawArticles);
+			fileFetcher = new FileFetcherMock();
+			articleCutter = new ArticleCutterMock();
+			screenPrinter = new ScreenPrinterMock();
+			filePrinter = new FilePrinterMock();
+		}
+
+		@Test
+		public void not_print_when_no_converted_articles() throws Exception {
+			//setup: word converter return an empty list
+			List<Article> emptyConvertedArticles = new ArrayList<>();
+			wordConverter = new WordConverterMock(emptyConvertedArticles);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
+			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.convert), null);
+
+			//execute
+			contentProcessor.process(config);
+
+			//verify
+			assertThat(screenPrinter.callTimes(),is(0));
+			assertThat(filePrinter.callTimes(), is(0));
+		}
+
+		@Test
+		public void print_to_screen_when_output_file_not_specified() throws Exception {
+			//setup: word converter return a non empty list
+			List<Article> convertedArticles = createArticles();
+			wordConverter = new WordConverterMock(convertedArticles);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
+			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.convert), null);
+
+			//execute
+			contentProcessor.process(config);
+
+			//verify
+			assertThat(screenPrinter.callTimes(),is(1));
+			assertThat(filePrinter.callTimes(), is(0));
+		}
+
+		@Test
+		public void print_to_screen_when_output_file_specified() throws Exception {
+			//setup: word converter return a non empty list
+			List<Article> convertedArticles = createArticles();
+			wordConverter = new WordConverterMock(convertedArticles);
+			contentProcessor = new ContentProcessor(rssFetcher, fileFetcher, wordConverter, articleCutter, screenPrinter, filePrinter);
+			ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConversionType.convert), "output.txt");
+
+			//execute
+			contentProcessor.process(config);
+
+			//verify
+			assertThat(screenPrinter.callTimes(),is(0));
+			assertThat(filePrinter.callTimes(), is(1));
 		}
 
 		private List<Article> createArticles() {
