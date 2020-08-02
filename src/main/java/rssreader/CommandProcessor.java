@@ -13,7 +13,7 @@ class CommandProcessor implements Callable<ReaderConfig>{
     		description = "cut or convert, or both with comma to split./n"
     				+ "cut : cut title to 10 and body to 30 words/n"
     				+ "convert : convert 'ユーザベース' to 'UZABASE'")
-    private List<ConvertWay> convertWays;
+    private List<ConversionType> conversionTypes;
 
     @Option(names = "-o", description = "output file name")
     private String outputFileName;
@@ -21,6 +21,6 @@ class CommandProcessor implements Callable<ReaderConfig>{
 
 	@Override
 	public	ReaderConfig call() {
-		return ReaderConfig.of(sourcePath, convertWays, outputFileName);
+		return ReaderConfig.of(sourcePath, conversionTypes, outputFileName);
 	}
 }

@@ -13,7 +13,7 @@ public class ReaderConfigTest {
 
 	private static final String CONVERT_WAY_NOT_SPECIFIED_MESSAGE = "At least one way to convert should be specified";
 	private static final String SOURCE_PATH = "test.com";
-	private static final List<ConvertWay> CONVERT_WAYS = Arrays.asList(ConvertWay.cut);
+	private static final List<ConversionType> CONVERT_WAYS = Arrays.asList(ConversionType.cut);
 	private static final String OUTPUT_FILE_NAME = "test.txt";
 	private static final String SOURCE_PATH_NOT_SPECIFIED_MESSAGE = "Source path not specified!";
 

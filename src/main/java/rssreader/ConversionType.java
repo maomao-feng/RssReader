@@ -1,6 +1,6 @@
 package rssreader;
 
-enum ConvertWay {
+enum ConversionType {
 	cut,
 	convert
 }

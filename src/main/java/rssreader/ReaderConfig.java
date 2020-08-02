@@ -7,17 +7,17 @@ import com.google.common.base.Strings;
 class ReaderConfig {
 
 	private String sourcePath;
-	private List<ConvertWay> convertWays;
+	private List<ConversionType> conversionTypes;
 	private String outputFileName;
 
-	private ReaderConfig(String sourcePath, List<ConvertWay> convertWays, String outputFileName) {
+	private ReaderConfig(String sourcePath, List<ConversionType> conversionTypes, String outputFileName) {
 		this.sourcePath = sourcePath;
-		this.convertWays = convertWays;
+		this.conversionTypes = conversionTypes;
 		this.outputFileName = outputFileName;
 
 	}
 
-	static ReaderConfig of(String sourcePath, List<ConvertWay> convertWays, String outputFileName) {
+	static ReaderConfig of(String sourcePath, List<ConversionType> convertWays, String outputFileName) {
 		if (Strings.isNullOrEmpty(sourcePath)) {
 			throw new IllegalArgumentException("Source path not specified!");
 		}
@@ -32,8 +32,8 @@ class ReaderConfig {
 		return this.sourcePath;
 	}
 
-	List<ConvertWay> convertWays() {
-		return this.convertWays;
+	List<ConversionType> convertWays() {
+		return this.conversionTypes;
 	}
 
 	String outputFileName() {
