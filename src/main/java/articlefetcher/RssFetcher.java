@@ -28,7 +28,7 @@ public class RssFetcher implements ArticleFetcher {
 
 	private List<Article> convertToArticles(SyndFeed feed) {
 		return feed.getEntries().stream().//
-				map(e -> new Article(e.getTitle(), e.getDescription().getValue())).//
+				map(e -> new Article(e.getTitle().trim(), e.getDescription().getValue().trim())).//
 				collect(Collectors.toList());
 	}
 

@@ -10,8 +10,8 @@ class CommandProcessor implements Callable<ReaderConfig>{
     private String sourcePath;
 
     @Option(names = "-c", split = ",", required = true,//
-    		description = "cut or convert, or both with comma to split./n"
-    				+ "cut : cut title to 10 and body to 30 words/n"
+    		description = "cut or convert, or both with comma to split.\n"
+    				+ "cut : cut title to 10 and body to 30 words\n"
     				+ "convert : convert 'ユーザベース' to 'UZABASE'")
     private List<ConversionType> conversionTypes;
 

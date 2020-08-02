@@ -12,6 +12,7 @@ public class ScreenPrinter implements ArticlePrinter {
 		articles.stream().forEach(e -> {
 			System.out.println("title: " + e.title());
 			System.out.println("body: " + e.body());
+			System.out.println();
 		});
 	}
 }
