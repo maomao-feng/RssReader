@@ -20,7 +20,7 @@ public class RssFetcher implements ArticleFetcher {
 			SyndFeed feed = new SyndFeedInput().build(new XmlReader((URL) source));
 			return convertToArticles(feed);
 		} catch (Exception e) {
-			System.out.println("Exception happenned when fetching rss feed");
+			System.out.println("Exception happenned when fetching rss feed. Please Check the url.");
 			return new ArrayList<>();
 		}
 

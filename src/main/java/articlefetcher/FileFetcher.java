@@ -3,6 +3,7 @@ package articlefetcher;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Charsets;
@@ -15,10 +16,17 @@ import model.Article;
 public class FileFetcher implements ArticleFetcher {
 
 	@Override
-	public List<Article> fetchArticles(Object source) throws IOException {
+	public List<Article> fetchArticles(Object source){
 		File sourceFile = new File((String) source);
-		List<String> rawText = Files.readLines(sourceFile, Charsets.UTF_8);
-		return parseText(rawText);
+		List<String> rawText;
+		try {
+			rawText = Files.readLines(sourceFile, Charsets.UTF_8);
+			return parseText(rawText);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return Collections.emptyList();
+		}
+
 	}
 
 	private List<Article> parseText(List<String> rawText) {
