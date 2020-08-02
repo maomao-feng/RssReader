@@ -1,7 +1,9 @@
 package rssreader;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 
 import interfaces.ArticleConverter;
@@ -25,12 +27,17 @@ class ContentProcessor {
 
 	void process(ReaderConfig config) throws Exception {
 		List<Article> rawArticles = fetchArticles(config.sourcePath());
-//		rawArticles.stream().forEach(e -> System.out.println(e.title()));
 		if(null == rawArticles || rawArticles.isEmpty()) {
 			return;
 		}
 		List<Article> convertedArticles = convertArticles(rawArticles, config.conversionTypes());
-//		convertedArticles.stream().forEach(e -> System.out.println(e.title()));
+		if(null == convertedArticles || convertedArticles.isEmpty()) {
+			return;
+		}
+		convertedArticles.stream().forEach(e -> {
+			System.out.println("title: " + e.title());
+			System.out.println("body: " + e.body());
+		});
 	}
 
 	private List<Article> fetchArticles(String sourcePath) throws Exception {
@@ -39,6 +46,9 @@ class ContentProcessor {
 			return rssFetcher.fetchArticles(feedUrl);
 		}catch(MalformedURLException e) {
 			return fileFetcher.fetchArticles(sourcePath);
+		}catch(IOException e) {
+			System.out.println("Exception happenned. Check source path");
+			return Collections.emptyList();
 		}
 	}
 
@@ -47,9 +57,7 @@ class ContentProcessor {
 			articles = conversionType == ConversionType.convert ?
 						wordConverter.convert(articles)
 						: articleCutter.convert(articles);
-
 		}
-
 		return articles;
 	}
 }

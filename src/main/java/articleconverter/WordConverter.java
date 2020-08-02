@@ -3,6 +3,8 @@ package articleconverter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Strings;
+
 import interfaces.ArticleConverter;
 import model.Article;
 
@@ -21,6 +23,8 @@ public class WordConverter implements ArticleConverter {
 	}
 
 	private String convert(String content) {
+		if (Strings.isNullOrEmpty(content))
+			return "";
 		return content.replaceAll(TARGET, REPLACEMENT);
 	}
 
