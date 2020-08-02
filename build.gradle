@@ -28,6 +28,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     compile 'info.picocli:picocli:4.5.0'
+    compile group: 'com.rometools', name: 'rome', version: '1.15.0'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+
 }
 
 application {
