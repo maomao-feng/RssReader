@@ -1,5 +1,7 @@
 package rssreader;
 
+import articleconverter.ArticleCutter;
+import articleconverter.WordConverter;
 import articlefetcher.FileFetcher;
 import articlefetcher.RssFetcher;
 import picocli.CommandLine;
@@ -14,7 +16,8 @@ public class RssReader{
         	System.exit(exitCode);
 
         ReaderConfig config = commandLine.getExecutionResult();
-        new ContentProcessor(new RssFetcher(), new FileFetcher()).process(config);
+        new ContentProcessor(new RssFetcher(), new FileFetcher(),
+        		new WordConverter(), new ArticleCutter()).process(config);
     }
 
 }

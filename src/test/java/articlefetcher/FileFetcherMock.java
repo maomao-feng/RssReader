@@ -1,4 +1,4 @@
-package rssreader;
+package articlefetcher;
 
 import java.util.List;
 

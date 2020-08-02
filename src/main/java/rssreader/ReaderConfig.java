@@ -32,7 +32,7 @@ class ReaderConfig {
 		return this.sourcePath;
 	}
 
-	List<ConversionType> convertWays() {
+	List<ConversionType> conversionTypes() {
 		return this.conversionTypes;
 	}
 
