@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Strings;
 
-public class ReaderConfig {
+class ReaderConfig {
 
 	private String sourcePath;
 	private List<ConvertWay> convertWays;
@@ -17,7 +17,7 @@ public class ReaderConfig {
 
 	}
 
-	public static ReaderConfig of(String sourcePath, List<ConvertWay> convertWays, String outputFileName) {
+	static ReaderConfig of(String sourcePath, List<ConvertWay> convertWays, String outputFileName) {
 		if (Strings.isNullOrEmpty(sourcePath)) {
 			throw new IllegalArgumentException("Source path not specified!");
 		}
@@ -28,19 +28,19 @@ public class ReaderConfig {
 		return new ReaderConfig(sourcePath, convertWays, outputFileName);
 	}
 
-	public String sourcePath() {
+	String sourcePath() {
 		return this.sourcePath;
 	}
 
-	public List<ConvertWay> convertWays() {
+	List<ConvertWay> convertWays() {
 		return this.convertWays;
 	}
 
-	public String outputFileName() {
+	String outputFileName() {
 		return this.outputFileName;
 	}
 
-	public boolean shouldOutputToScreen() {
+	boolean shouldOutputToScreen() {
 		return Strings.isNullOrEmpty(outputFileName);
 	}
 
