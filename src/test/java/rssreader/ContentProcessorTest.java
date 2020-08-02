@@ -24,7 +24,7 @@ public class ContentProcessorTest {
 	}
 
 	@Test
-	public void rssFetcher_is_called_when_source_path_is_an_valid_url() {
+	public void rssFetcher_is_called_when_source_path_is_an_valid_url() throws Exception {
 		ReaderConfig config = ReaderConfig.of(URL, Arrays.asList(ConvertWay.cut), null);
 		contentProcessor.process(config);
 		assertThat(rssFetcher.callTimes(),is(1));
@@ -32,7 +32,7 @@ public class ContentProcessorTest {
 	}
 
 	@Test
-	public void fileFetcher_is_called_when_source_path_is_not_url() {
+	public void fileFetcher_is_called_when_source_path_is_not_url() throws Exception {
 		ReaderConfig config = ReaderConfig.of(FILE, Arrays.asList(ConvertWay.cut), null);
 		contentProcessor.process(config);
 		assertThat(rssFetcher.callTimes(),is(0));

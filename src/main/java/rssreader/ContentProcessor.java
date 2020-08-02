@@ -17,11 +17,12 @@ class ContentProcessor {
 		this.fileFetcher = fileFetcher;
 	}
 
-	void process(ReaderConfig config) {
+	void process(ReaderConfig config) throws Exception {
 		List<Article> articles = fetchArticles(config.sourcePath());
+		articles.stream().forEach(e -> System.out.println(e.title()));
 	}
 
-	private List<Article> fetchArticles(String sourcePath) {
+	private List<Article> fetchArticles(String sourcePath) throws Exception {
 		try {
 			URL feedUrl = new URL(sourcePath);
 			return rssFetcher.fetchArticles(feedUrl);

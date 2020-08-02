@@ -6,7 +6,7 @@ import picocli.CommandLine;
 
 public class RssReader{
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         CommandLine commandLine = new CommandLine(new CommandProcessor());
 
         int exitCode = commandLine.execute(args);

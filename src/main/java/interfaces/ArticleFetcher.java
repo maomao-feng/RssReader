@@ -5,5 +5,5 @@ import java.util.List;
 import model.Article;
 
 public interface ArticleFetcher {
-	public List<Article> fetchArticles(Object source);
+	public List<Article> fetchArticles(Object source) throws Exception;
 }
