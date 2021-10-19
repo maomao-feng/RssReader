@@ -15,7 +15,7 @@ public class FileFetcherTest {
 	@Test
 	public void test() throws IOException {
 		FileFetcher fileFetcher = new FileFetcher();
-		List<Article> articles = fileFetcher.fetchArticles("src\\test\\resources\\articles.txt");
+		List<Article> articles = fileFetcher.fetchArticles("src/test/resources/articles.txt");
 		assertThat(articles.size(),is(2));
 	}
 
